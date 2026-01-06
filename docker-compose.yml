@@ -1,0 +1,14 @@
+services:
+  web-server:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+      - "8001:8001"
+      - "8002:8002"
+      - "8003:8003"
+    volumes:
+      - ./html:/usr/share/nginx/html
+      - ./microservices:/usr/share/nginx/microservices
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./logs/nginx:/var/log/nginx
+    restart: always

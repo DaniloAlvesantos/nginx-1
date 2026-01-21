@@ -15,6 +15,7 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./logs/nginx:/var/log/nginx
       - ./tmp/cache:/tmp/cache
+      - ./tmp/certs:/etc/nginx/certs
     restart: always
 
   fastcgi-app:
@@ -23,7 +24,10 @@ services:
     volumes:
       - ./api:/app
     command: >
-      sh -c "apt-get update && 
-             apt-get install -y build-essential python3-dev && 
-             pip install uwsgi &&
-             uwsgi --socket 0.0.0.0:9000 --protocol=fastcgi --wsgi-file app.py --py-autoreload 1"
+      sh -c "
+        apt-get update &&
+        apt-get install -y --no-install-recommends build-essential python3-dev openssl ca-certificates &&
+        pip install uwsgi &&
+        uwsgi --socket 0.0.0.0:9000 --protocol=fastcgi --wsgi-file app.py --py-autoreload 1
+      "
+
